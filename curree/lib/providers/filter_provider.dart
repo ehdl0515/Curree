@@ -1,4 +1,3 @@
-import 'package:curree/providers/provider.dart';
 import 'package:flutter/material.dart';
 
 import '../constant/currency.dart';
@@ -6,13 +5,10 @@ import '../constant/exchange_unit.dart';
 
 
 class FilterProvider extends ChangeNotifier {
-  final GlobalStore globalStore;
-
-  FilterProvider(this.globalStore);
 
   static Map<Currency, bool> setMyMap() {
     Map<Currency, bool> myMap = {};
-    for (Currency item in currencyList) {
+    for (Currency item in currencies) {
       myMap[item] = false;
     }
     return myMap;
@@ -27,25 +23,8 @@ class FilterProvider extends ChangeNotifier {
   }
 
   // 필터 선택 시 변수
-  Map<Currency, bool> _filterSelectedMainCurrency = setMyMap();
-  Map<Currency, bool> get filterSelectedMainCurrency => _filterSelectedMainCurrency;
-  void setFilterSelectedMainCurrency(Map<Currency, bool> newValue) {
-    _filterSelectedMainCurrency = newValue;
-    notifyListeners();
-  }
-
-  static Currency getTrueMainCurrency(Map<Currency, bool> datas) {
-    Currency rtnData = currencyList[0];
-    datas.forEach((key, value) {
-      if (value) {
-        rtnData = key;
-      }
-    });
-    return rtnData;
-  }
-
   static Currency getTrueSubCurrency(Map<Currency, bool> datas) {
-    Currency rtnData = currencyList[1];
+    Currency rtnData = currencies[1];
     datas.forEach((key, value) {
       if (value) {
         rtnData = key;
@@ -90,6 +69,20 @@ class FilterProvider extends ChangeNotifier {
   Map<int, bool> get filterSelectedExchangeIncreaseUnit => _filterSelectedExchangeIncreaseUnit;
   void setFilterSelectedExchangeIncreaseUnit(Map<int, bool> newValue) {
     _filterSelectedExchangeIncreaseUnit = newValue;
+    notifyListeners();
+  }
+
+  int _selectedConvert = 100;
+  int get selectedConvert => _selectedConvert;
+  void setSelectedConvert(int newValue) {
+    _selectedConvert = newValue;
+    notifyListeners();
+  }
+
+  List<int> _selectedConverts = [];
+  List<int> get selectedConverts => _selectedConverts;
+  void setSelectedConverts(List<int> newValues) {
+    _selectedConverts = newValues;
     notifyListeners();
   }
 

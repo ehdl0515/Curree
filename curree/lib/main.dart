@@ -1,6 +1,7 @@
 import 'package:curree/providers/filter_provider.dart';
 import 'package:curree/providers/logger_provider.dart';
-import 'package:curree/providers/provider.dart';
+import 'package:curree/providers/setting_provider.dart';
+import 'package:curree/providers/rate_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,8 +21,9 @@ void main() {
       MultiProvider(
         providers: [
           ChangeNotifierProvider.value(value: loggerProvider),
-          ChangeNotifierProvider(create: (create) => GlobalStore()),
-          ChangeNotifierProvider(create: (create) => FilterProvider(GlobalStore())),
+          ChangeNotifierProvider(create: (create) => RateProvider()),
+          ChangeNotifierProvider(create: (create) => SettingProvider()),
+          ChangeNotifierProvider(create: (create) => FilterProvider()),
         ],
         child: const MyApp(),
       ),

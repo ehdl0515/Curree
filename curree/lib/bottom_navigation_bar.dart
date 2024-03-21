@@ -1,8 +1,10 @@
+import 'package:curree/providers/logger_provider.dart';
 import 'package:curree/screens/currency_table_screen.dart';
 import 'package:curree/screens/current_rate_screen.dart';
 import 'package:curree/screens/setting_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyBottomNavigationBar extends StatefulWidget {
   const MyBottomNavigationBar({super.key});
@@ -30,17 +32,22 @@ class _MyBottomNavigationBarState extends State<MyBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    final logger = Provider.of<LoggerProvider>(context).logger;
+    logger.d('build MyBottomNavigationBar - selectedIndex: $_selectedIndex');
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blueGrey,
+        title: Text("Curree"),
       ),
-      body: Container(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        unselectedLabelStyle: const TextStyle(fontFamily: 'SUITE'),
-        selectedLabelStyle: const TextStyle(fontFamily: 'SUITE', fontWeight: FontWeight.bold),
+        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
         type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

@@ -3,21 +3,14 @@ import 'package:flutter/material.dart';
 import '../constant/currency.dart';
 import '../constant/exchange_unit.dart';
 
-class GlobalStore extends ChangeNotifier {
-  Currency _mainCurrency = Currency.won;
-  Currency _subCurrency = Currency.yen;
+class SettingProvider extends ChangeNotifier {
+
+  Currency _subCurrency = Currency.dollar;
 
   int _exchangeMinimum = ExchangeUnit.defaultExchangeUnit.minimum;
   int _exchangeMaximum = ExchangeUnit.defaultExchangeUnit.maximum;
   int _exchangeIncreaseUnit = ExchangeUnit.defaultExchangeUnit.increaseUnit;
 
-
-  Currency get mainCurrency => _mainCurrency;
-
-  void setMainCurrency(Currency newCurrency) {
-    _mainCurrency = newCurrency;
-    notifyListeners();
-  }
 
   Currency get subCurrency => _subCurrency;
 
