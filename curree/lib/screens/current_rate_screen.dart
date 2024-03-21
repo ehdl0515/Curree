@@ -1,9 +1,9 @@
-import 'package:curree/widgets/current_rate_widget.dart';
-import 'package:curree/providers/provider.dart';
+import 'package:curree/providers/rate_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../constant/currency.dart';
+import '../providers/logger_provider.dart';
+import '../widgets/current_rate_widget.dart';
 
 
 class MyCurrentRateScreen extends StatefulWidget {
@@ -16,107 +16,85 @@ class MyCurrentRateScreen extends StatefulWidget {
 
 class _MyCurrentRateScreenState extends State<MyCurrentRateScreen> {
 
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final logger = Provider.of<LoggerProvider>(context).logger;
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    Currency mainCurrency = context.watch<GlobalStore>().mainCurrency;
-
-
-    return SingleChildScrollView(
-      child: Container(
-        height: height * 3,
-        width: width,
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              child: Container(
-                color: Colors.white,
-                height: height * 3,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: SingleChildScrollView(
+        child: SizedBox(
+          height: height * 3,
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
               ),
-            ),
-            Positioned(
-              child: Container(
-                height: height * 0.26,
-                width: width,
-                alignment: Alignment.topLeft,
-                padding: EdgeInsets.fromLTRB(width * 0.048, height * 0.024, 0, 0),
-                decoration: BoxDecoration(
-                  color: Colors.blueGrey[200],
+              SearchBar(
+                controller: _controller,
+                constraints: BoxConstraints(
+                  maxHeight: height * 0.07,
+                  maxWidth: width * 0.8,
                 ),
-                child: const Text('실시간 환율 정보', style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'SUITE',
-                  fontSize: 30,
-                ),),
-              ),
-            ),
-            Positioned(
-              top: height * 0.15,
-              width: width,
-              height: height * 0.2,
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: width * 0.036, vertical: height * 0.036),
-                alignment: Alignment.topLeft,
-                decoration: BoxDecoration(
-                    color: Colors.grey[50],
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 7,
-                      offset: const Offset(1,1),
-                    )]
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(width * 0.048, height * 0.024, 0, 0),
-                        child: const Text('선택된 주 통화',
-                          style: TextStyle(
-                            fontFamily: 'SUITE',
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(width * 0.060, height * 0.072, 0, 0),
-                        child: Text(
-                          '${mainCurrency.code} (${mainCurrency.name}, ${mainCurrency.symbol})',
-                          style: const TextStyle(
-                            fontFamily: 'SUITE',
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+                trailing: [
+                  IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () {
+                      FocusScope.of(context).unfocus();
+                      logger.d('pressed search icon');
+                      context.read<RateProvider>().setSelectedNation(_controller.text);
+                      logger.d('value = ${_controller.text}');
+                    },
+                  ),
+                ],
+                backgroundColor: const MaterialStatePropertyAll(Colors.white),
+                elevation: const MaterialStatePropertyAll(0),
+                overlayColor: MaterialStatePropertyAll(Colors.blueGrey[50]),
 
-            Container(
-              height: height * 0.6,
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: width * 0.036, vertical: height * 0.35),
-              decoration: BoxDecoration(
-                color: Colors.grey[50],
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 7,
-                  offset: const Offset(1,1),
-                )]
+                shape: MaterialStateProperty.all(ContinuousRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                ),
+                side: MaterialStateProperty.all(const BorderSide(
+                  width: 0.5,
+                  color: Colors.grey,
+                )),
+                // textStyle: MaterialStateProperty.all(TextStyle(
+                //
+                // )),
+                padding: MaterialStateProperty.all(const EdgeInsets.all(10)),
+                hintText: "나라 이름을 입력하세요",
+                onSubmitted: (value) {
+                  setState(() {
+                    context.read<RateProvider>().setSelectedNation(value);
+                    logger.d('value = $value');
+                  });
+                },
+                onTap: () {
+                  _controller.selection = TextSelection(
+                      baseOffset: 0,
+                      extentOffset: _controller.text.length);
+                },
               ),
-              child: const CurrentRateWidget(),
-            )
-          ],
+              Container(
+                height: height * 0.05,
+              ),
+              const CurrentRateWidget(),
+            ],
+          ),
         ),
       ),
     );
