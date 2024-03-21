@@ -1,6 +1,5 @@
-import 'package:curree/constant/currency.dart';
 import 'package:curree/constant/exchange_unit.dart';
-import 'package:curree/providers/provider.dart';
+import 'package:curree/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -19,11 +18,11 @@ class _SettingMainCurrencyScreenState extends State<SettingMainCurrencyScreen> {
   Widget build(BuildContext context) {
 
     String selectSection = ModalRoute.of(context)?.settings.arguments as String;
-    String title = '주 통화 최소 금액';
+    String title = '변환 최소 금액';
     if (selectSection == 'maximum') {
-      title = '주 통화 최대 금액';
+      title = '변환 최대 금액';
     } else if (selectSection == 'increaseUnit') {
-      title = '주 통화 증가 폭';
+      title = '변환 증가 폭';
     }
 
     return Scaffold(
@@ -42,13 +41,13 @@ class _SettingMainCurrencyScreenState extends State<SettingMainCurrencyScreen> {
   }
 
   List<SettingsTile> _buildCurrencyTiles(String selectSection) {
-    int currentSelectedExchange = context.read<GlobalStore>().exchangeMinimum;
+    int currentSelectedExchange = context.read<SettingProvider>().exchangeMinimum;
     List selectedList = minimumList;
     if (selectSection == 'maximum') {
-      currentSelectedExchange = context.read<GlobalStore>().exchangeMaximum;
+      currentSelectedExchange = context.read<SettingProvider>().exchangeMaximum;
       selectedList = maximumList;
     } else if (selectSection == 'increaseUnit') {
-      currentSelectedExchange = context.read<GlobalStore>().exchangeIncreaseUnit;
+      currentSelectedExchange = context.read<SettingProvider>().exchangeIncreaseUnit;
       selectedList = increaseUnitList;
     }
 
@@ -61,11 +60,11 @@ class _SettingMainCurrencyScreenState extends State<SettingMainCurrencyScreen> {
           setState(() {
 
             if (selectSection == 'minimum') {
-              context.read<GlobalStore>().setExchangeMinimum(value);
+              context.read<SettingProvider>().setExchangeMinimum(value);
             } else if (selectSection == 'maximum') {
-              context.read<GlobalStore>().setExchangeMaximum(value);
+              context.read<SettingProvider>().setExchangeMaximum(value);
             } else if (selectSection == 'increaseUnit') {
-              context.read<GlobalStore>().setExchangeIncreaseUnit(value);
+              context.read<SettingProvider>().setExchangeIncreaseUnit(value);
             }
 
             Navigator.pop(context);
