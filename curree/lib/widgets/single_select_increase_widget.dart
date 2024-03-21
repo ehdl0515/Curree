@@ -1,5 +1,5 @@
 import 'package:curree/constant/exchange_unit.dart';
-import 'package:curree/providers/provider.dart';
+import 'package:curree/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +28,7 @@ class _SingleSelectionIncreaseUnitWidgetState extends State<SingleSelectionIncre
     Map<int, bool> exchangeMinimum = context.watch<FilterProvider>().filterSelectedExchangeMinimum;
     Map<int, bool> exchangeMaximum = context.watch<FilterProvider>().filterSelectedExchangeMaximum;
 
-    int exchangeIncreaseUnit = context.watch<GlobalStore>().exchangeIncreaseUnit;
+    int exchangeIncreaseUnit = context.watch<SettingProvider>().exchangeIncreaseUnit;
 
     bool stopFlag = false;
     for (var entry in selectedInfo.entries) {
@@ -49,12 +49,18 @@ class _SingleSelectionIncreaseUnitWidgetState extends State<SingleSelectionIncre
         final selectedValue = increaseUnitList[index];
 
         int selectedMaximumValue = maximumList.last;
+        int selectedMinimumValue = minimumList.first;
 
 
         return GestureDetector(
           onTap: () {
             setState(() {
+              FocusScope.of(context).unfocus();
+
               print("present ${increaseUnitList[index]}");
+
+
+
 
               for (var entry in exchangeMaximum.entries) {
                 if (entry.value) {
@@ -62,8 +68,25 @@ class _SingleSelectionIncreaseUnitWidgetState extends State<SingleSelectionIncre
                 }
               }
 
+              for (var entry in exchangeMinimum.entries) {
+                if (entry.value) {
+                  selectedMinimumValue = entry.key;
+                }
+              }
+
+              if (selectedMinimumValue <=500 && selectedMaximumValue >= 10000 ) {
+                context.read<FilterProvider>().setFilterSelectedExchangeIncreaseUnit(
+                    {1000: true});
+              }
+
+
               if (selectedValue >= selectedMaximumValue) {
                 print("increaseUnit greater than maximum");
+                return;
+              }
+
+              if (selectedMinimumValue <=500 && selectedMaximumValue >= 10000 && selectedValue <= 500) {
+                print("invalid between this value!");
                 return;
               }
 

@@ -5,13 +5,13 @@ import 'package:provider/provider.dart';
 import '../constant/currency.dart';
 import '../constant/exchange_unit.dart';
 import '../providers/filter_provider.dart';
+import '../providers/logger_provider.dart';
 
-Map<dynamic, dynamic> makeGridMap(BuildContext context) {
+List<int> makeGridMap(BuildContext context) {
 
-  Map<dynamic, dynamic> tableData = {};
+  final logger = Provider.of<LoggerProvider>(context, listen: false).logger;
 
-  Map<Currency, bool> mainData = context.read<FilterProvider>().filterSelectedMainCurrency;
-  Currency selectedMainCurrency = FilterProvider.getTrueMainCurrency(mainData);
+  List<int> tableData = [];
 
   Map<Currency, bool> subData = context.read<FilterProvider>().filterSelectedSubCurrency;
   Currency selectedSubCurrency = FilterProvider.getTrueSubCurrency(subData);
@@ -26,39 +26,30 @@ Map<dynamic, dynamic> makeGridMap(BuildContext context) {
   int selectedExchangeIncreaseUnit = FilterProvider.getTrueExchange(increaseData, increaseUnitList, defaultIndex: 3);
 
 
-  print(selectedMainCurrency);
-  print(selectedSubCurrency);
-  print(selectedExchangeMinimum);
-  print(selectedExchangeMaximum);
-  print(selectedExchangeIncreaseUnit);
+  logger.d(selectedSubCurrency);
+  logger.d(selectedExchangeMinimum);
+  logger.d(selectedExchangeMaximum);
+  logger.d(selectedExchangeIncreaseUnit);
 
-  print("환율 변환");
+  logger.d("환율 변환");
 
   int finalData = 0;
-  double tempData = 2.5;
 
 
   for (int i = selectedExchangeMinimum; i <= selectedExchangeMaximum; i += selectedExchangeIncreaseUnit) {
-    print(i);
-    tempData = 2.5;
-
-    double result = i * tempData;
-    tableData[i] = result;
+    logger.d(i);
+    tableData.add(i);
     finalData = i;
   }
 
   if (selectedExchangeMaximum - finalData != 0) {
-    tableData[selectedExchangeMaximum] = selectedExchangeMaximum * tempData;
+    tableData.add(selectedExchangeMaximum);
   }
 
-  print(tableData);
-  print("환율 변환 끝");
+  logger.d(tableData);
+  logger.d("환율 변환 끝");
 
-
-  print("적용 버튼: $tableData}");
-
-  tableData['mainCurrency'] = selectedMainCurrency;
-  tableData['subCurrency'] = selectedSubCurrency;
+  logger.d("적용 버튼: $tableData}");
 
   return tableData;
 }

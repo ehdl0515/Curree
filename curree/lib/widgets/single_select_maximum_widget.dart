@@ -1,5 +1,5 @@
 import 'package:curree/constant/exchange_unit.dart';
-import 'package:curree/providers/provider.dart';
+import 'package:curree/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +29,7 @@ class _SingleSelectionMaximumWidgetState extends State<SingleSelectionMaximumWid
     Map<int, bool> exchangeMinimum = context.watch<FilterProvider>().filterSelectedExchangeMinimum;
     Map<int, bool> exchangeIncreaseUnit = context.watch<FilterProvider>().filterSelectedExchangeIncreaseUnit;
 
-    int exchangeMaximum = context.watch<GlobalStore>().exchangeMaximum;
+    int exchangeMaximum = context.watch<SettingProvider>().exchangeMaximum;
 
     bool stopFlag = false;
     for (var entry in selectedInfo.entries) {
@@ -55,6 +55,8 @@ class _SingleSelectionMaximumWidgetState extends State<SingleSelectionMaximumWid
         return GestureDetector(
           onTap: () {
             setState(() {
+              FocusScope.of(context).unfocus();
+
               print("present ${maximumList[index]}");
 
               for (var entry in exchangeMinimum.entries) {

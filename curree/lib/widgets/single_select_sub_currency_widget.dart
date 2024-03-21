@@ -1,4 +1,4 @@
-import 'package:curree/providers/provider.dart';
+import 'package:curree/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,9 +25,8 @@ class _SingleSelectionSubCurrencyWidgetState extends State<SingleSelectionSubCur
   Widget build(BuildContext context) {
 
     Map<Currency, bool> selectedInfo = context.watch<FilterProvider>().filterSelectedSubCurrency;
-    Map<Currency, bool> mainCurrency = context.watch<FilterProvider>().filterSelectedMainCurrency;
 
-    Currency subCurrency = context.watch<GlobalStore>().subCurrency;
+    Currency subCurrency = context.watch<SettingProvider>().subCurrency;
 
     bool stopFlag = false;
     for (var entry in selectedInfo.entries) {
@@ -42,29 +41,16 @@ class _SingleSelectionSubCurrencyWidgetState extends State<SingleSelectionSubCur
 
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: currencyList.length,
+      itemCount: currencies.length,
       itemBuilder: (BuildContext context, int index) {
 
-        final selectedCurrency = currencyList[index];
-
-        Currency? selectedMainCurrency;
-
+        final selectedCurrency = currencies[index];
 
         return GestureDetector(
           onTap: () {
             setState(() {
-              print("present ${currencyList[index]}");
-
-              for (var entry in mainCurrency.entries) {
-                if (entry.value) {
-                  selectedMainCurrency = entry.key;
-                }
-              }
-
-              if (selectedCurrency == selectedMainCurrency) {
-                print("sub == main");
-                return;
-              }
+              FocusScope.of(context).unfocus();
+              print("present ${currencies[index]}");
 
               if (selectedInfo[selectedCurrency] == true) {
                 print("same thing touch");
@@ -72,7 +58,7 @@ class _SingleSelectionSubCurrencyWidgetState extends State<SingleSelectionSubCur
               }
 
               selectedInfo.forEach((key, value) {
-                if (key == currencyList[index]) {
+                if (key == currencies[index]) {
                   selectedInfo[key] = true;
                 } else {
                   selectedInfo[key] = false;
@@ -97,10 +83,10 @@ class _SingleSelectionSubCurrencyWidgetState extends State<SingleSelectionSubCur
               borderRadius: BorderRadius.circular(7),
             ),
             child: Text(
-              currencyList[index].code,
+              currencies[index].code,
               style: TextStyle(
-                color: selectedInfo[currencyList[index]] ?? false ? Colors.white : Colors.black,
-                fontWeight: selectedInfo[currencyList[index]] ?? false ? FontWeight.bold : FontWeight.normal,
+                color: selectedInfo[currencies[index]] ?? false ? Colors.white : Colors.black,
+                fontWeight: selectedInfo[currencies[index]] ?? false ? FontWeight.bold : FontWeight.normal,
               ),
             ),
           ),

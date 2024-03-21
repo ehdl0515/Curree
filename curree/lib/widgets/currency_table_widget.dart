@@ -1,165 +1,241 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../constant/currency.dart';
+import '../providers/filter_provider.dart';
+import '../providers/logger_provider.dart';
 
 class CurrencyTableWidget extends StatefulWidget {
-
-  final Map<dynamic, dynamic> applyData;
+  final List<int> applyData;
 
   const CurrencyTableWidget({super.key, required this.applyData});
 
   @override
-  _CurrencyTableWidgetState createState() =>
-      _CurrencyTableWidgetState();
+  _CurrencyTableWidgetState createState() => _CurrencyTableWidgetState();
 }
-
 class _CurrencyTableWidgetState extends State<CurrencyTableWidget> {
-
   @override
   Widget build(BuildContext context) {
+    final logger = Provider.of<LoggerProvider>(context).logger;
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    Currency selectedMainCurrency = widget.applyData.remove('mainCurrency');
-    Currency selectedSubCurrency = widget.applyData.remove('subCurrency');
+    logger.d('build CurrencyTableWidget ${widget.applyData}');
+
+    Map<Currency, bool> subData =
+        context.read<FilterProvider>().filterSelectedSubCurrency;
+    Currency selectedSubCurrency = FilterProvider.getTrueSubCurrency(subData);
+
+    String name = selectedSubCurrency.name;
+    String code = selectedSubCurrency.code;
+    String symbol = selectedSubCurrency.symbol;
+    String nation = selectedSubCurrency.nation;
+    int currentDate = selectedSubCurrency.currentDate;
+    String currentRate = selectedSubCurrency.currentRate;
+
+    logger.d(selectedSubCurrency);
 
     return Column(
       children: [
+        SizedBox(
+          height: height * 0.07,
+        ),
+        Container(
+          alignment: Alignment.centerRight,
+          padding: EdgeInsets.only(right: width * 0.1),
+          // margin: EdgeInsets.only(left: width * 0.8 * 0.03),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text("변환 통화: $code", style: TextStyle(color: Colors.blueGrey[300]),),
+              Text('적용 환율: $currentRate', style: TextStyle(color: Colors.blueGrey[300]),),
+              Text("환율 일시: $currentDate", style: TextStyle(color: Colors.blueGrey[300]),)
+            ],
+          )
+        ),
+        const SizedBox(
+          height: 10,
+        ),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(width * 0.036, height * 0.024, 0, 0),
-              child: RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontFamily: 'SUITE',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: selectedMainCurrency.code,
-                      style: TextStyle(
-                        color: Colors.blueGrey[300],
+              alignment: Alignment.centerLeft,
+              height: 50 * (widget.applyData.length + 2),
+              width: width * 0.4,
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.applyData.length,
+                // itemExtent: 55,
+                itemBuilder: (BuildContext context, int index) {
+                  int originValue = widget.applyData[index];
+
+                  return Column(
+                    children: [
+                      Container(
+                        width: width * 0.35,
+                        height: height * 0.05,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset: const Offset(1, 1),
+                              )
+                            ]
+                          // border: Border.all(width: 0.5),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: height * 0.01,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: width * 0.8 * 0.05,
+                                ),
+                              ],
+                            ),
+                            AutoSizeText.rich(
+                              TextSpan(children: [
+                                TextSpan(
+                                  text: originValue.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ]),
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const TextSpan(
-                      text: ' 를\n',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                    TextSpan(
-                      text: selectedSubCurrency.code,
-                      style: const TextStyle(
-                        color: Colors.pink,
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '   로 변환합니다.',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ]
-                ),
+                    ],
+                  );
+                },
               ),
             ),
+
+
+
             Container(
-              padding: EdgeInsets.fromLTRB(width * 0.10, height * 0.024, 0, 0),
-              child: const Text(
-                '2024-03-02 16:20',
-                style: TextStyle(
-                  fontFamily: 'SUITE',
-                  fontWeight: FontWeight.normal,
-                  color: Colors.grey,
-                  fontSize: 12,
-                ),
+              alignment: Alignment.centerLeft,
+              height: 50 * (widget.applyData.length + 2),
+              width: width * 0.1,
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                // itemExtent: 55,
+                itemCount: widget.applyData.length,
+                itemBuilder: (BuildContext context, int index) {
+
+                  return Column(
+                    children: [
+                      Container(
+                        width: width * 0.35,
+                        height: height * 0.05,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              height: height * 0.01,
+                              child: const Icon(Icons.arrow_forward_rounded,
+                              size: 20,
+                              color: Colors.blueGrey,),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+
+
+            Container(
+              alignment: Alignment.centerRight,
+              height: 50 * (widget.applyData.length + 2),
+              width: width * 0.4,
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.applyData.length,
+                // itemExtent: 55,
+                itemBuilder: (BuildContext context, int index) {
+                  int originValue = widget.applyData[index];
+                  double convertValue =
+                      originValue * double.parse(selectedSubCurrency.currentRate);
+
+                  return Column(
+                    children: [
+                      Container(
+                        width: width * 0.35,
+                        height: height * 0.05,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 1,
+                                blurRadius: 4,
+                                offset: const Offset(1, 1),
+                              )
+                            ]
+                          // border: Border.all(width: 0.5),
+                        ),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: height * 0.01,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: width * 0.8 * 0.05,
+                                ),
+                              ],
+                            ),
+                            AutoSizeText.rich(
+                              TextSpan(children: [
+                                TextSpan(
+                                  text: convertValue.toString(),
+                                  style: const TextStyle(
+                                    color: Colors.blueGrey,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ]),
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(width * 0.036, height * 0.010, 0, 0),
-          alignment: Alignment.centerLeft,
-          child: const Text(
-            '출처: OpenExchangeReference',
-            style: TextStyle(
-              fontFamily: 'SUITE',
-              color: Colors.grey,
-              fontSize: 12,
-            ),
-          ),
-        ),
-        Container(
-          height: height * 0.4 + height * 0.01 * widget.applyData.length,
-          width: width * 0.8,
-          margin: EdgeInsets.only(top: height * 0.012),
-          child:
-          GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: widget.applyData.length,
-            gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 1,
-              // mainAxisSpacing: width * 0.010,
-              // crossAxisSpacing: height * 0.010,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-
-              int key = widget.applyData.keys.elementAt(index);
-              double value = widget.applyData[key]!;
-              return Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: const BorderSide(color: Colors.grey, width: 1),
-                    left: const BorderSide(color: Colors.grey, width: 1),
-                    right: BorderSide(color: Colors.grey, width: index.isEven ? 0 : 1), // 맨 오른쪽 요소의 경우만 테두리 추가
-                    bottom: BorderSide(color: Colors.grey, width: index < widget.applyData.length - 2 ? 0 : 1), // 맨 아래 요소의 경우만 테두리 추가
-              ),
-                ),
-                child: ListTile(
-                  // trailing: const Icon(CupertinoIcons.arrowtriangle_up_fill, color: Colors.red,),
-                  title: AutoSizeText.rich(
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: key.toString(),
-                          style: TextStyle(
-                            color: Colors.blueGrey[300],
-                          ),
-                        ),
-                        const TextSpan(
-                          text: ' = ',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                        TextSpan(
-                          text: value.toString(),
-                          style: const TextStyle(
-                            color: Colors.pink,
-                          ),
-                        ),
-                      ]
-                    ),
-                    maxLines: 1,
-                    style: const TextStyle(
-                      fontFamily: 'SUITE',
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
         ),
       ],
     );
