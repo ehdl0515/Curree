@@ -14,6 +14,16 @@ class FilterProvider extends ChangeNotifier {
     return myMap;
   }
 
+  static Map<Currency, bool> setSettingMap(Currency setValue) {
+    Map<Currency, bool> myMap = {};
+    for (Currency item in currencies) {
+      myMap[item] = false;
+      myMap[setValue] = true;
+    }
+    return myMap;
+  }
+
+
   static Map<int, bool> setMyInt(List data) {
     Map<int, bool> myMap = {};
     for (int item in data) {
@@ -22,9 +32,19 @@ class FilterProvider extends ChangeNotifier {
     return myMap;
   }
 
+  static Map<int, bool> setSettingInt(List data, int setValue) {
+    Map<int, bool> myMap = {};
+    for (int item in data) {
+      myMap[item] = false;
+      myMap[setValue] = true;
+    }
+    return myMap;
+  }
+
+
   // 필터 선택 시 변수
   static Currency getTrueSubCurrency(Map<Currency, bool> datas) {
-    Currency rtnData = currencies[1];
+    Currency rtnData = currencies[0];
     datas.forEach((key, value) {
       if (value) {
         rtnData = key;
@@ -33,8 +53,8 @@ class FilterProvider extends ChangeNotifier {
     return rtnData;
   }
 
-  static int getTrueExchange(Map<int, bool> datas, List<int> parentData, {int defaultIndex=0}) {
-    int rtnData = parentData[defaultIndex];
+  static int getTrueExchange(Map<int, bool> datas, int setValue) {
+    int rtnData = setValue;
     datas.forEach((key, value) {
       if (value) {
         rtnData = key;

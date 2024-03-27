@@ -5,12 +5,28 @@ import '../constant/exchange_unit.dart';
 
 class SettingProvider extends ChangeNotifier {
 
+  Map<String, dynamic> _deviceInfo = {};
+
   Currency _subCurrency = Currency.dollar;
 
   int _exchangeMinimum = ExchangeUnit.defaultExchangeUnit.minimum;
   int _exchangeMaximum = ExchangeUnit.defaultExchangeUnit.maximum;
   int _exchangeIncreaseUnit = ExchangeUnit.defaultExchangeUnit.increaseUnit;
 
+  int _profileNo = 0;
+
+  Map<String, dynamic> get deviceInfo => _deviceInfo;
+  void setDeviceInfo(Map<String, dynamic> newValue) {
+    _deviceInfo = newValue;
+    notifyListeners();
+  }
+
+
+  int get profileNo => _profileNo;
+  void setProfileNo(int newValue) {
+    _profileNo = newValue;
+    notifyListeners();
+  }
 
   Currency get subCurrency => _subCurrency;
 
