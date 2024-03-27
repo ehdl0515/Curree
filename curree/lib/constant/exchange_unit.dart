@@ -1,5 +1,8 @@
 List<int> minimumList = [
   0,
+  10,
+  50,
+  100,
   500,
   1000,
   5000,
@@ -7,18 +10,20 @@ List<int> minimumList = [
 ];
 
 List<int> maximumList = [
+  100,
+  500,
   1000,
   2000,
   5000,
   10000,
-  20000,
-  50000,
-  100000,
-  200000,
-  500000,
 ];
 
 List<int> increaseUnitList = [
+  5,
+  10,
+  50,
+  100,
+  500,
   1000,
   2000,
   5000,
@@ -39,6 +44,6 @@ class ExchangeUnit {
     required this.increaseUnit,
   });
 
-  static ExchangeUnit defaultExchangeUnit = ExchangeUnit(seqNo: 1, minimum: minimumList[0], maximum: maximumList[0], increaseUnit: increaseUnitList[3]);
+  static ExchangeUnit defaultExchangeUnit = ExchangeUnit(seqNo: 1, minimum: minimumList[0], maximum: maximumList[0], increaseUnit: increaseUnitList[0]);
 }
 

@@ -3,10 +3,11 @@ class Currency {
   final String code;
   final String name;
   final String symbol;
-  final String currentRate;
-  final int currentDate;
-  final String previousRate;
-  final int previousDate;
+  late int unit;
+  late String currentRate;
+  late DateTime? currentDate;
+  late String previousRate;
+  late DateTime? previousDate;
   final String flagImage;
 
   Currency({
@@ -14,6 +15,7 @@ class Currency {
     required this.code,
     required this.name,
     required this.symbol,
+    required this.unit,
     required this.currentRate,
     required this.currentDate,
     required this.previousRate,
@@ -23,7 +25,7 @@ class Currency {
 
   @override
   String toString() {
-    return '[$code, $name, $symbol, ($currentRate, $currentDate), ($previousRate, $previousDate), $flagImage]';
+    return '[$code, $name, $symbol, $unit, ($currentRate, $currentDate), ($previousRate, $previousDate), $flagImage]';
   }
 
   static Currency dollar = Currency(
@@ -31,10 +33,11 @@ class Currency {
       code: "USD",
       name: "달러",
       symbol: "\$",
+      unit: 1,
       currentRate: (0.0).toStringAsFixed(1),
-      currentDate: 20240321141000,
+      currentDate: null,
       previousRate: (0.0).toStringAsFixed(1),
-      previousDate: 20240321140000,
+      previousDate: null,
       flagImage: "assets/images/USAFlag.png",
   );
 
@@ -43,10 +46,11 @@ class Currency {
       code: "EUR",
       name: "유로",
       symbol: "€",
+      unit: 1,
       currentRate: (0.0).toStringAsFixed(1),
-      currentDate: 20240321141000,
+      currentDate: null,
       previousRate: (0.0).toStringAsFixed(1),
-      previousDate: 20240321140000,
+      previousDate: null,
       flagImage: "assets/images/EuropeFlag.png",
   );
 
@@ -55,10 +59,11 @@ class Currency {
       code: "JPY",
       name: "엔",
       symbol: "￥",
+      unit: 100,
       currentRate: (0.0).toStringAsFixed(1),
-      currentDate: 20240321141000,
+      currentDate: null,
       previousRate: (0.0).toStringAsFixed(1),
-      previousDate: 20240321140000,
+      previousDate: null,
       flagImage: "assets/images/JapanFlag.png",
   );
 
@@ -67,10 +72,11 @@ class Currency {
       code: "CNY",
       name: "위안",
       symbol: "元",
+      unit: 1,
       currentRate: (0.0).toStringAsFixed(1),
-      currentDate: 20240321141000,
+      currentDate: null,
       previousRate: (0.0).toStringAsFixed(1),
-      previousDate: 20240321140000,
+      previousDate: null,
       flagImage: "assets/images/ChinaFlag.png",
   );
 
