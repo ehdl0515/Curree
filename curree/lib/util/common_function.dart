@@ -17,17 +17,17 @@ List<int> makeGridMap(BuildContext context) {
 
   List<int> tableData = [];
 
-  Map<Currency, bool> subData = context.read<FilterProvider>().filterSelectedSubCurrency;
+  Map<Currency, bool> subData = Provider.of<FilterProvider>(context, listen: false).filterSelectedSubCurrency;
   Currency selectedSubCurrency = FilterProvider.getTrueSubCurrency(subData);
 
-  Map<int, bool> minData = context.read<FilterProvider>().filterSelectedExchangeMinimum;
-  int selectedExchangeMinimum = FilterProvider.getTrueExchange(minData, minimumList);
+  Map<int, bool> minData = Provider.of<FilterProvider>(context, listen: false).filterSelectedExchangeMinimum;
+  int selectedExchangeMinimum = FilterProvider.getTrueExchange(minData, context.read<SettingProvider>().exchangeMinimum);
 
-  Map<int, bool> maxData = context.read<FilterProvider>().filterSelectedExchangeMaximum;
-  int selectedExchangeMaximum = FilterProvider.getTrueExchange(maxData, maximumList);
+  Map<int, bool> maxData = Provider.of<FilterProvider>(context, listen: false).filterSelectedExchangeMaximum;
+  int selectedExchangeMaximum = FilterProvider.getTrueExchange(maxData, context.read<SettingProvider>().exchangeMaximum);
 
-  Map<int, bool> increaseData = context.read<FilterProvider>().filterSelectedExchangeIncreaseUnit;
-  int selectedExchangeIncreaseUnit = FilterProvider.getTrueExchange(increaseData, increaseUnitList, defaultIndex: 3);
+  Map<int, bool> increaseData = Provider.of<FilterProvider>(context, listen: false).filterSelectedExchangeIncreaseUnit;
+  int selectedExchangeIncreaseUnit = FilterProvider.getTrueExchange(increaseData, context.read<SettingProvider>().exchangeIncreaseUnit);
 
 
   logger.d(selectedSubCurrency);
@@ -41,7 +41,6 @@ List<int> makeGridMap(BuildContext context) {
 
 
   for (int i = selectedExchangeMinimum; i <= selectedExchangeMaximum; i += selectedExchangeIncreaseUnit) {
-    logger.d(i);
     tableData.add(i);
     finalData = i;
   }
@@ -50,10 +49,13 @@ List<int> makeGridMap(BuildContext context) {
     tableData.add(selectedExchangeMaximum);
   }
 
-  logger.d(tableData);
-  logger.d("환율 변환 끝");
+  if (tableData.first == 0) {
+    tableData.removeAt(0);
+  }
 
-  logger.d("적용 버튼: $tableData}");
+  logger.d(tableData);
+
+  logger.d("환율 변환 끝");
 
   return tableData;
 }

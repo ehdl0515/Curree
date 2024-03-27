@@ -27,6 +27,7 @@ class _MyCurrentRateScreenState extends State<MyCurrentRateScreen> {
   @override
   Widget build(BuildContext context) {
     final logger = Provider.of<LoggerProvider>(context).logger;
+    logger.i("MyCurrentRateScreen] build");
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -36,11 +37,12 @@ class _MyCurrentRateScreenState extends State<MyCurrentRateScreen> {
         FocusScope.of(context).unfocus();
       },
       child: SingleChildScrollView(
-        child: SizedBox(
+        child: Container(
+          alignment: Alignment.center,
           height: height * 3,
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               SearchBar(
@@ -90,7 +92,14 @@ class _MyCurrentRateScreenState extends State<MyCurrentRateScreen> {
                 },
               ),
               Container(
-                height: height * 0.05,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                height: height * 0.07,
+                child: Text(
+                  "10분 간격으로 업데이트됩니다 (주말, 공휴일 제외)",
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                  ),
+                ),
               ),
               const CurrentRateWidget(),
             ],
