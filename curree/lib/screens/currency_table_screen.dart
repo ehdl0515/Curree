@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../constant/exchange_unit.dart';
 import '../providers/logger_provider.dart';
+import '../providers/setting_provider.dart';
 import '../widgets/single_select_increase_widget.dart';
 import '../widgets/single_select_maximum_widget.dart';
 import '../widgets/single_select_minimum_widget.dart';
@@ -23,17 +24,20 @@ class MyCurrencyTableScreen extends StatefulWidget {
 class _MyCurrencyTableScreenState extends State<MyCurrencyTableScreen> {
 
   late TextEditingController _controller;
-
+  late bool initExpanded;
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
+    initExpanded = true;
   }
 
   @override
   Widget build(BuildContext context) {
 
     final logger = Provider.of<LoggerProvider>(context).logger;
+    logger.i("MyCurrencyTableScreen] build");
+
     final ScrollController _scrollController = ScrollController();
 
     double width = MediaQuery.of(context).size.width;
@@ -44,9 +48,6 @@ class _MyCurrencyTableScreenState extends State<MyCurrencyTableScreen> {
       tableData = makeGridMap(context);
     }
 
-    logger.d('build MyCurrencyTableScreen');
-
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -54,10 +55,10 @@ class _MyCurrencyTableScreenState extends State<MyCurrencyTableScreen> {
       child: SingleChildScrollView(
         controller: _scrollController,
         child: SizedBox(
-            height: height * 5,
+            height: height * 9,
             child: Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 SearchBar(
@@ -77,7 +78,11 @@ class _MyCurrencyTableScreenState extends State<MyCurrencyTableScreen> {
                         logger.d('newValue = $newValue');
                         setState(() {
                           context.read<FilterProvider>().setSelectedConverts([newValue]);
-                          _scrollController.animateTo(height * 0.7, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+                          double positioned = height * 0.65;
+                          if (!initExpanded) {
+                            positioned = 0;
+                          }
+                          _scrollController.animateTo(positioned, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
                         });
                       },
                     ),
@@ -106,7 +111,12 @@ class _MyCurrencyTableScreenState extends State<MyCurrencyTableScreen> {
                       logger.d('newValue = $newValue');
                       context.read<FilterProvider>().setSelectedConverts([newValue]);
 
-                      _scrollController.animateTo(height * 0.7, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+                      double positioned = height * 0.65;
+                      if (!initExpanded) {
+                        positioned = 0;
+                      }
+
+                      _scrollController.animateTo(positioned, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
 
                     });
                   },
@@ -124,10 +134,11 @@ class _MyCurrencyTableScreenState extends State<MyCurrencyTableScreen> {
                   child: ExpansionTile(
                     title: const Text('필터', style: TextStyle(fontWeight: FontWeight.bold),),
                     subtitle: const Text('설정탭의 값이 기본입니다.'),
-                    initiallyExpanded: true,
+                    initiallyExpanded: initExpanded,
                     onExpansionChanged: (isExpanded) {
                       setState(() {
                         FocusScope.of(context).unfocus();
+                        initExpanded = false;
 
                       });
                     },
@@ -222,6 +233,28 @@ class _MyCurrencyTableScreenState extends State<MyCurrencyTableScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // ElevatedButton(
+                            //   style: ElevatedButton.styleFrom(
+                            //       minimumSize: Size(width * 0.3, height * 0.05),
+                            //       elevation: 2,
+                            //       foregroundColor: Colors.black,
+                            //       backgroundColor: Colors.white,
+                            //       shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(8),
+                            //       )
+                            //   ),
+                            //   onPressed: () {
+                            //     setState(() {
+                            //       _controller.text = "";
+                            //       List<int> temp = makeGridMap(context);
+                            //       context.read<FilterProvider>().setSelectedConverts(temp);
+                            //
+                            //     });
+                            //     _scrollController.animateTo(height * 0.7, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+                            //   },
+                            //   child: const Text('적용'),
+                            // ),
+                            // Container(width: width * 0.1,),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   minimumSize: Size(width * 0.3, height * 0.05),
@@ -233,35 +266,10 @@ class _MyCurrencyTableScreenState extends State<MyCurrencyTableScreen> {
                                   )
                               ),
                               onPressed: () {
-                                setState(() {
-                                  _controller.text = "";
-                                  logger.d('ddd');
-                                  List<int> temp = makeGridMap(context);
-                                  logger.d('ffff');
-                                  context.read<FilterProvider>().setSelectedConverts(temp);
-                                  logger.d('111');
-
-                                });
-                                _scrollController.animateTo(height * 0.7, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-                              },
-                              child: const Text('적용'),
-                            ),
-                            Container(width: width * 0.1,),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  minimumSize: Size(width * 0.3, height * 0.05),
-                                  elevation: 2,
-                                  foregroundColor: Colors.black,
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  )
-                              ),
-                              onPressed: () {
-                                context.read<FilterProvider>().setFilterSelectedSubCurrency(FilterProvider.setMyMap());
-                                context.read<FilterProvider>().setFilterSelectedExchangeMinimum(FilterProvider.setMyInt(minimumList));
-                                context.read<FilterProvider>().setFilterSelectedExchangeMaximum(FilterProvider.setMyInt(maximumList));
-                                context.read<FilterProvider>().setFilterSelectedExchangeIncreaseUnit(FilterProvider.setMyInt(increaseUnitList));
+                                context.read<FilterProvider>().setFilterSelectedSubCurrency(FilterProvider.setSettingMap(Provider.of<SettingProvider>(context, listen: false).subCurrency));
+                                context.read<FilterProvider>().setFilterSelectedExchangeMinimum(FilterProvider.setSettingInt(minimumList, Provider.of<SettingProvider>(context, listen: false).exchangeMinimum));
+                                context.read<FilterProvider>().setFilterSelectedExchangeMaximum(FilterProvider.setSettingInt(maximumList, Provider.of<SettingProvider>(context, listen: false).exchangeMaximum));
+                                context.read<FilterProvider>().setFilterSelectedExchangeIncreaseUnit(FilterProvider.setSettingInt(increaseUnitList, Provider.of<SettingProvider>(context, listen: false).exchangeIncreaseUnit));
 
                                 setState(() {
                                   _controller.text = "";

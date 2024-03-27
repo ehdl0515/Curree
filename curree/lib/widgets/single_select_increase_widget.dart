@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/filter_provider.dart';
+import '../providers/logger_provider.dart';
 
 class SingleSelectionIncreaseUnitWidget extends StatefulWidget {
 
@@ -23,6 +24,7 @@ class _SingleSelectionIncreaseUnitWidgetState extends State<SingleSelectionIncre
 
   @override
   Widget build(BuildContext context) {
+    final logger = Provider.of<LoggerProvider>(context).logger;
 
     Map<int, bool> selectedInfo = context.watch<FilterProvider>().filterSelectedExchangeIncreaseUnit;
     Map<int, bool> exchangeMinimum = context.watch<FilterProvider>().filterSelectedExchangeMinimum;
@@ -57,11 +59,6 @@ class _SingleSelectionIncreaseUnitWidgetState extends State<SingleSelectionIncre
             setState(() {
               FocusScope.of(context).unfocus();
 
-              print("present ${increaseUnitList[index]}");
-
-
-
-
               for (var entry in exchangeMaximum.entries) {
                 if (entry.value) {
                   selectedMaximumValue = entry.key;
@@ -74,27 +71,15 @@ class _SingleSelectionIncreaseUnitWidgetState extends State<SingleSelectionIncre
                 }
               }
 
-              if (selectedMinimumValue <=500 && selectedMaximumValue >= 10000 ) {
-                context.read<FilterProvider>().setFilterSelectedExchangeIncreaseUnit(
-                    {1000: true});
-              }
-
-
               if (selectedValue >= selectedMaximumValue) {
-                print("increaseUnit greater than maximum");
-                return;
-              }
-
-              if (selectedMinimumValue <=500 && selectedMaximumValue >= 10000 && selectedValue <= 500) {
-                print("invalid between this value!");
+                logger.d("SingleSelectionIncreaseUnitWidget] increaseUnit($selectedValue) greater than maximum($selectedMaximumValue)");
                 return;
               }
 
               if (selectedInfo[selectedValue] == true) {
-                print("same thing touch");
+                logger.d("SingleSelectionIncreaseUnitWidget] same thing touch");
                 return;
               }
-
 
               selectedInfo.forEach((key, value) {
                 if (key == increaseUnitList[index]) {
@@ -105,11 +90,6 @@ class _SingleSelectionIncreaseUnitWidgetState extends State<SingleSelectionIncre
               });
 
               context.read<FilterProvider>().setFilterSelectedExchangeIncreaseUnit(selectedInfo);
-              // print(index);
-              // print('${selectedInfo}');
-              // print('${selectedInfo[currencyList[index]]}');
-              // print('\n');
-
             });
           },
 

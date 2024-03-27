@@ -3,8 +3,8 @@ import 'package:curree/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../constant/currency.dart';
 import '../providers/filter_provider.dart';
+import '../providers/logger_provider.dart';
 
 class SingleSelectionMaximumWidget extends StatefulWidget {
 
@@ -24,6 +24,7 @@ class _SingleSelectionMaximumWidgetState extends State<SingleSelectionMaximumWid
 
   @override
   Widget build(BuildContext context) {
+    final logger = Provider.of<LoggerProvider>(context).logger;
 
     Map<int, bool> selectedInfo = context.watch<FilterProvider>().filterSelectedExchangeMaximum;
     Map<int, bool> exchangeMinimum = context.watch<FilterProvider>().filterSelectedExchangeMinimum;
@@ -49,15 +50,12 @@ class _SingleSelectionMaximumWidgetState extends State<SingleSelectionMaximumWid
 
         final selectedValue = maximumList[index];
 
-        int selectedMinimumValue = 0;
-
+        int selectedMinimumValue = minimumList.first;
 
         return GestureDetector(
           onTap: () {
             setState(() {
               FocusScope.of(context).unfocus();
-
-              print("present ${maximumList[index]}");
 
               for (var entry in exchangeMinimum.entries) {
                 if (entry.value) {
@@ -66,12 +64,12 @@ class _SingleSelectionMaximumWidgetState extends State<SingleSelectionMaximumWid
               }
 
               if (selectedValue < selectedMinimumValue) {
-                print("maximum smaller than minimum");
+                logger.d("SingleSelectionMaximumWidget] maximum($selectedValue) smaller than minimum($selectedMinimumValue)");
                 return;
               }
 
               if (selectedInfo[selectedValue] == true) {
-                print("same thing touch");
+                logger.d("SingleSelectionMaximumWidget] same thing touch ($selectedValue)");
                 return;
               }
 
@@ -84,11 +82,6 @@ class _SingleSelectionMaximumWidgetState extends State<SingleSelectionMaximumWid
               });
 
               context.read<FilterProvider>().setFilterSelectedExchangeMaximum(selectedInfo);
-              // print(index);
-              // print('${selectedInfo}');
-              // print('${selectedInfo[currencyList[index]]}');
-              // print('\n');
-
             });
           },
 

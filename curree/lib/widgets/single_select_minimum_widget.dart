@@ -3,8 +3,8 @@ import 'package:curree/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../constant/currency.dart';
 import '../providers/filter_provider.dart';
+import '../providers/logger_provider.dart';
 
 class SingleSelectionMinimumWidget extends StatefulWidget {
 
@@ -24,6 +24,7 @@ class _SingleSelectionMinimumWidgetState extends State<SingleSelectionMinimumWid
 
   @override
   Widget build(BuildContext context) {
+    final logger = Provider.of<LoggerProvider>(context).logger;
 
     Map<int, bool> selectedInfo = context.watch<FilterProvider>().filterSelectedExchangeMinimum;
     Map<int, bool> exchangeMaximum = context.watch<FilterProvider>().filterSelectedExchangeMaximum;
@@ -49,15 +50,12 @@ class _SingleSelectionMinimumWidgetState extends State<SingleSelectionMinimumWid
 
         final selectedValue = minimumList[index];
 
-        int selectedMaximumValue = 10000000;
-
+        int selectedMaximumValue = maximumList.last;
 
         return GestureDetector(
           onTap: () {
             setState(() {
               FocusScope.of(context).unfocus();
-
-              print("present ${minimumList[index]}");
 
               for (var entry in exchangeMaximum.entries) {
                 if (entry.value) {
@@ -66,12 +64,12 @@ class _SingleSelectionMinimumWidgetState extends State<SingleSelectionMinimumWid
               }
 
               if (selectedValue > selectedMaximumValue) {
-                print("minimum greater than maximum");
+                logger.d("SingleSElectionMinimumWidget] minimum($selectedValue) greater than maximum($selectedMaximumValue)");
                 return;
               }
 
               if (selectedInfo[selectedValue] == true) {
-                print("same thing touch");
+                logger.d("SingleSElectionMinimumWidget] same thing touch ($selectedValue)");
                 return;
               }
 
@@ -84,11 +82,6 @@ class _SingleSelectionMinimumWidgetState extends State<SingleSelectionMinimumWid
               });
 
               context.read<FilterProvider>().setFilterSelectedExchangeMinimum(selectedInfo);
-              // print(index);
-              // print('${selectedInfo}');
-              // print('${selectedInfo[currencyList[index]]}');
-              // print('\n');
-
             });
           },
 
