@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 import '../constant/currency.dart';
+import '../providers/logger_provider.dart';
 import 'setting_currency_list_screen.dart';
 import 'setting_main_currency_screen.dart';
 
@@ -14,7 +15,8 @@ class MySettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final logger = Provider.of<LoggerProvider>(context).logger;
+    logger.i("MySettingScreen] build");
     Currency selectedSubCurrency = context.watch<SettingProvider>().subCurrency;
     int selectedExchangeMinimum = context.watch<SettingProvider>().exchangeMinimum;
     int selectedExchangeMaximum = context.watch<SettingProvider>().exchangeMaximum;
@@ -31,7 +33,8 @@ class MySettingScreen extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingCurrencyListScreen(),
                       // settings: const RouteSettings(arguments: 'sub')
                     ));
-                    selectedSubCurrency = context.read<SettingProvider>().subCurrency;
+                    selectedSubCurrency = Provider.of<SettingProvider>(context, listen: false).subCurrency;
+
                   },
                   leading: const Icon(CupertinoIcons.money_dollar_circle),
                   title: const Text('보조 통화', style: TextStyle(fontFamily: 'SUITE',)),
@@ -56,7 +59,7 @@ class MySettingScreen extends StatelessWidget {
                         settings: const RouteSettings(arguments: 'minimum'),
 
                     ));
-                    selectedExchangeMinimum = context.read<SettingProvider>().exchangeMinimum;
+                    selectedExchangeMinimum = Provider.of<SettingProvider>(context, listen: false).exchangeMinimum;
                   },
                   leading: const Icon(CupertinoIcons.number_circle_fill),
                   title: const Text('변환 최소 금액', style: TextStyle(fontFamily: 'SUITE',)),
@@ -68,7 +71,7 @@ class MySettingScreen extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingMainCurrencyScreen(),
                     settings: const RouteSettings(arguments: 'maximum'),
                     ));
-                    selectedExchangeMaximum = context.read<SettingProvider>().exchangeMaximum;
+                    selectedExchangeMaximum = Provider.of<SettingProvider>(context, listen: false).exchangeMaximum;
                   },
                   leading: const Icon(CupertinoIcons.number_circle),
                   title: const Text('변환 최대 금액', style: TextStyle(fontFamily: 'SUITE',)),
@@ -80,7 +83,7 @@ class MySettingScreen extends StatelessWidget {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const SettingMainCurrencyScreen(),
                       settings: const RouteSettings(arguments: 'increaseUnit'),
                     ));
-                    selectedExchangeIncreaseUnit = context.read<SettingProvider>().exchangeIncreaseUnit;
+                    selectedExchangeIncreaseUnit = Provider.of<SettingProvider>(context, listen: false).exchangeIncreaseUnit;
                   },
                   leading: const Icon(CupertinoIcons.chevron_up),
                   title: const Text('변환 증가 폭', style: TextStyle(fontFamily: 'SUITE',)),
