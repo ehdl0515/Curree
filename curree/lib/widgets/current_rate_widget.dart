@@ -132,7 +132,7 @@ class _CurrentRateWidgetState extends State<CurrentRateWidget> {
                               height: height * 0.02,
                             ),
                             Container(
-                              width: width * 0.8,
+                              width: width * 0.9,
                               height: height * 0.1,
                               alignment: Alignment.centerLeft,
                               // margin: EdgeInsets.symmetric(horizontal: width * 0.036, vertical: height * 0.05),
@@ -171,10 +171,24 @@ class _CurrentRateWidgetState extends State<CurrentRateWidget> {
 
                                       Container(
                                         margin: EdgeInsets.only(left: width * 0.8 * 0.03),
-                                        child: Text(
-                                          "$nation $name($code,$symbol)",
+                                        child: AutoSizeText.rich(
+                                          TextSpan(children: [
+                                            TextSpan(
+                                              text: nation,
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: " $name($code,$symbol)",
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ]),
+                                          maxLines: 1,
                                           style: const TextStyle(
-                                            // fontWeight: FontWeight.bold,
                                             fontSize: 18,
                                           ),
                                         ),
