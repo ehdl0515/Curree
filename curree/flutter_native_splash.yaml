@@ -1,18 +1,18 @@
 flutter_native_splash:
 
   #color: 스플래시 스크린의 배경색
-  color: "#FFFFFF"
+  color: "#13C3CE"
 
   #background_image: 스플래시 스크린의 배경 이미지
   #background_image: "assets/background.png"
 
   #image: 스플래시 스크린의 이미지
-#  image: assets/image1.png
+  image: assets/cent.png
 
-  branding: assets/image1.png
+#  branding: assets/cent.png
   # Specify your branding image for dark mode.
   #branding_dark: assets/dart_dark.png
-  branding_mode: bottom
+#  branding_mode: bottom
 
   #color_dark: 디바이스 설정이 다크 모드일 경우의 배경색
   #color_dark: "#042a49"
