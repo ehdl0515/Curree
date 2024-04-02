@@ -33,8 +33,13 @@ class _CurrentRateWidgetState extends State<CurrentRateWidget> {
     Currency euro = context.watch<RateProvider>().euro;
     Currency yen = context.watch<RateProvider>().yen;
     Currency yuan = context.watch<RateProvider>().yuan;
+    Currency pound = context.watch<RateProvider>().pound;
+    Currency hkDollar = context.watch<RateProvider>().hkDollar;
+    Currency peso = context.watch<RateProvider>().peso;
+    Currency newTaiwanDollar = context.watch<RateProvider>().newTaiwanDollar;
+    Currency baht = context.watch<RateProvider>().baht;
 
-    List<Currency> newCurrencies = [dollar, euro, yen ,yuan];
+    List<Currency> newCurrencies = [dollar, euro, yen ,yuan, pound, hkDollar, peso, newTaiwanDollar, baht];
 
     String? selectedNation = Provider.of<RateProvider>(context, listen: false).selectedNation;
 
@@ -54,8 +59,18 @@ class _CurrentRateWidgetState extends State<CurrentRateWidget> {
         case '중국':
           newCurrencies = [yuan];
           break;
+        case '영국':
+          newCurrencies = [pound];
+        case '홍콩':
+          newCurrencies = [hkDollar];
+        case '필리핀':
+          newCurrencies = [peso];
+        case '대만':
+          newCurrencies = [newTaiwanDollar];
+        case '태국':
+          newCurrencies = [baht];
         default:
-          newCurrencies = [dollar, euro, yen ,yuan];
+          newCurrencies = [dollar, euro, yen ,yuan, pound, hkDollar, peso, newTaiwanDollar, baht];
     }
   }
 

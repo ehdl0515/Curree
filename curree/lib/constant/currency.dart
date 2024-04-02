@@ -80,6 +80,71 @@ class Currency {
       flagImage: "assets/images/ChinaFlag.png",
   );
 
+  static Currency pound = Currency(
+    nation: "영국",
+    code: "GBP",
+    name: "파운드",
+    symbol: "£",
+    unit: 1,
+    currentRate: (0.0).toStringAsFixed(1),
+    currentDate: null,
+    previousRate: (0.0).toStringAsFixed(1),
+    previousDate: null,
+    flagImage: "assets/images/EnglandFlag.svg",
+  );
+
+  static Currency hkDollar = Currency(
+    nation: "홍콩",
+    code: "HKD",
+    name: "홍콩달러",
+    symbol: "HK\$",
+    unit: 1,
+    currentRate: (0.0).toStringAsFixed(1),
+    currentDate: null,
+    previousRate: (0.0).toStringAsFixed(1),
+    previousDate: null,
+    flagImage: "assets/images/HongkongFlag.svg",
+  );
+
+  static Currency peso = Currency(
+    nation: "필리핀",
+    code: "PHP",
+    name: "페소",
+    symbol: "₱",
+    unit: 1,
+    currentRate: (0.0).toStringAsFixed(1),
+    currentDate: null,
+    previousRate: (0.0).toStringAsFixed(1),
+    previousDate: null,
+    flagImage: "assets/images/PhilippineFlag.svg",
+  );
+
+  static Currency newTaiwanDollar = Currency(
+    nation: "대만",
+    code: "TWD",
+    name: "신대만달러",
+    symbol: "NT\$",
+    unit: 1,
+    currentRate: (0.0).toStringAsFixed(1),
+    currentDate: null,
+    previousRate: (0.0).toStringAsFixed(1),
+    previousDate: null,
+    flagImage: "assets/images/TaiwanFlag.svg",
+  );
+
+  static Currency baht = Currency(
+    nation: "태국",
+    code: "THB",
+    name: "바트",
+    symbol: "฿",
+    unit: 1,
+    currentRate: (0.0).toStringAsFixed(1),
+    currentDate: null,
+    previousRate: (0.0).toStringAsFixed(1),
+    previousDate: null,
+    flagImage: "assets/images/ThaiLandFlag.svg",
+  );
+
 
 }
 
@@ -89,4 +154,9 @@ List<Currency> currencies = [
   Currency.euro,
   Currency.yen,
   Currency.yuan,
+  Currency.pound,
+  Currency.hkDollar,
+  Currency.peso,
+  Currency.newTaiwanDollar,
+  Currency.baht,
 ];
