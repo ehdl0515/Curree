@@ -35,7 +35,7 @@ class _SettingMainCurrencyScreenState extends State<SettingMainCurrencyScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: const Color(0xff119fa8),
         title: const Text("Curree", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),),
       ),
       body: SettingsList(
