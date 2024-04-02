@@ -98,7 +98,7 @@ class _SingleSelectionIncreaseUnitWidgetState extends State<SingleSelectionIncre
             alignment: Alignment.center,
             margin: const EdgeInsets.only(right: 10),
             decoration: BoxDecoration(
-              color: selectedInfo[selectedValue] ?? false ? Colors.pink[300]  : Colors.grey[200],
+              color: selectedInfo[selectedValue] ?? false ? const Color(0xff0d797e)  : Colors.grey[200],
               borderRadius: BorderRadius.circular(7),
             ),
             child: Text(

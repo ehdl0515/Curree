@@ -79,7 +79,7 @@ class _SingleSelectionSubCurrencyWidgetState extends State<SingleSelectionSubCur
             alignment: Alignment.center,
             margin: const EdgeInsets.only(right: 10),
             decoration: BoxDecoration(
-              color: selectedInfo[selectedCurrency] ?? false ? Colors.pink[300]  : Colors.grey[200],
+              color: selectedInfo[selectedCurrency] ?? false ? const Color(0xff0d797e)  : Colors.grey[200],
               borderRadius: BorderRadius.circular(7),
             ),
             child: Text(
